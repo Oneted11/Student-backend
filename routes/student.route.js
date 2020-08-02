@@ -7,10 +7,13 @@ let studentSchema = require("../models/Student");
 router.route("/create-student").post((req, res, next) => {
   studentSchema.create(req.body, (error, data) => {
     if (error) {
-      return next(error);
+      res.status(500).json({
+        message: error.message,
+      });
     } else {
-      console.log(data);
-      res.json(data);
+      res.json({
+        id: data.id,
+      });
     }
   });
 });
@@ -18,8 +21,11 @@ router.route("/create-student").post((req, res, next) => {
 router.route("/").get((req, res) => {
   studentSchema.find((error, data) => {
     if (error) {
-      return next(error);
+      res.status(500).json({
+        message: error.message,
+      });
     } else {
+      console.log(data)
       res.json(data);
     }
   });
@@ -36,30 +42,34 @@ router.route("/edit-student/:id").get((req, res) => {
   });
 });
 // Update Student
-router.route('/update-student/:id').put((req, res, next) => {
-    studentSchema.findByIdAndUpdate(req.params.id, {
-      $set: req.body
-    }, (error, data) => {
+router.route("/update-student/:id").put((req, res, next) => {
+  studentSchema.findByIdAndUpdate(
+    req.params.id,
+    {
+      $set: req.body,
+    },
+    (error, data) => {
       if (error) {
         return next(error);
-        console.log(error)
+        console.log(error);
       } else {
-        res.json(data)
-        console.log('Student updated successfully !')
+        res.json(data);
+        console.log("Student updated successfully !");
       }
-    })
-  })
+    }
+  );
+});
 // Delete Student
-router.route('/delete-student/:id').delete((req, res, next) => {
-    studentSchema.findByIdAndRemove(req.params.id, (error, data) => {
-      if (error) {
-        return next(error);
-      } else {
-        res.status(200).json({
-          msg: data
-        })
-      }
-    })
-  })
-  
-  module.exports = router;  
+router.route("/delete-student/:id").delete((req, res, next) => {
+  studentSchema.findByIdAndRemove(req.params.id, (error, data) => {
+    if (error) {
+      return next(error);
+    } else {
+      res.status(200).json({
+        msg: data,
+      });
+    }
+  });
+});
+
+module.exports = router;

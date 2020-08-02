@@ -92,10 +92,16 @@ require("source-map-support").install();
   !*** ./database/db.js ***!
   \************************/
 /*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
+
+var db;
+
+if (false) {} else {
+  db = "mongodb://localhost:27017/myproject";
+}
 
 module.exports = {
-  db: "mongodb+srv://ted:ted@cluster0-ocswh.mongodb.net/<dbname>?retryWrites=true&w=majority",
+  db,
 };
 
 
@@ -140,10 +146,13 @@ let studentSchema = __webpack_require__(/*! ../models/Student */ "./models/Stude
 router.route("/create-student").post((req, res, next) => {
   studentSchema.create(req.body, (error, data) => {
     if (error) {
-      return next(error);
+      res.status(500).json({
+        message: error.message,
+      });
     } else {
-      console.log(data);
-      res.json(data);
+      res.json({
+        id: data.id,
+      });
     }
   });
 });
@@ -151,8 +160,11 @@ router.route("/create-student").post((req, res, next) => {
 router.route("/").get((req, res) => {
   studentSchema.find((error, data) => {
     if (error) {
-      return next(error);
+      res.status(500).json({
+        message: error.message,
+      });
     } else {
+      console.log(data)
       res.json(data);
     }
   });
@@ -169,33 +181,38 @@ router.route("/edit-student/:id").get((req, res) => {
   });
 });
 // Update Student
-router.route('/update-student/:id').put((req, res, next) => {
-    studentSchema.findByIdAndUpdate(req.params.id, {
-      $set: req.body
-    }, (error, data) => {
+router.route("/update-student/:id").put((req, res, next) => {
+  studentSchema.findByIdAndUpdate(
+    req.params.id,
+    {
+      $set: req.body,
+    },
+    (error, data) => {
       if (error) {
         return next(error);
-        console.log(error)
+        console.log(error);
       } else {
-        res.json(data)
-        console.log('Student updated successfully !')
+        res.json(data);
+        console.log("Student updated successfully !");
       }
-    })
-  })
+    }
+  );
+});
 // Delete Student
-router.route('/delete-student/:id').delete((req, res, next) => {
-    studentSchema.findByIdAndRemove(req.params.id, (error, data) => {
-      if (error) {
-        return next(error);
-      } else {
-        res.status(200).json({
-          msg: data
-        })
-      }
-    })
-  })
-  
-  module.exports = router;  
+router.route("/delete-student/:id").delete((req, res, next) => {
+  studentSchema.findByIdAndRemove(req.params.id, (error, data) => {
+    if (error) {
+      return next(error);
+    } else {
+      res.status(200).json({
+        msg: data,
+      });
+    }
+  });
+});
+
+module.exports = router;
+
 
 /***/ }),
 
@@ -217,6 +234,7 @@ let dbConfig = __webpack_require__(/*! ./database/db */ "./database/db.js");
 const studentRoute = __webpack_require__(/*! ../back/routes/student.route */ "./routes/student.route.js");
 // Connecting mongoDB Database
 mongoose.Promise = global.Promise;
+console.log("Attempting db connection ", dbConfig.db);
 mongoose
   .connect(dbConfig.db, {
     useNewUrlParser: true,
@@ -230,14 +248,23 @@ mongoose
       console.log("Database connection failed : ", error);
     }
   );
+  const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log("we're connected!")
+});
 const app = express();
-app.use(morgan('tiny'),bodyParser.json());
+if (true) {
+  app.use(morgan("tiny"));
+}
+app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
     extended: true,
   })
 );
 app.use(cors());
+app.use("/health", (req, res) => res.send({ status: "ok" }));
 app.use("/students", studentRoute);
 // PORT
 const port = process.env.PORT || 4000;
@@ -254,7 +281,7 @@ const server = app.listen(port, () => {
 //   if (!err.statusCode) err.statusCode = 500;
 //   res.status(err.statusCode).send(err.message);
 // });
-module.exports=app
+module.exports = app;
 
 
 /***/ }),

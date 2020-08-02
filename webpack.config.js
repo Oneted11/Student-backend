@@ -13,12 +13,12 @@ fs.readdirSync("node_modules")
   });
 
 module.exports = {
-  entry: NODE_ENV !== "development" ? "./src/index.js" : "./server.js",
+  entry: NODE_ENV !== "development" ? "./dist/index.js" : "./server.js",
   target: "node",
   mode: "development",
   devtool: "source-map",
   output: {
-    path: path.resolve(__dirname, "."),
+    path: path.resolve(__dirname, "./dist/"),
     filename: "index.js",
     libraryTarget: "this"
   },
