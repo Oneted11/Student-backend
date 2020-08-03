@@ -1,12 +1,10 @@
 var db;
 
-if (process.env.NODE_ENV == "production") {
-  db =
-    "mongodb+srv://ted:ted@cluster0-ocswh.mongodb.net/<dbname>?retryWrites=true&w=majority";
-} else {
-  db = "mongodb://localhost:27017/myproject";
-}
+const {
+  NODE_ENV,
+  DB_URL = "mongodb://localhost:27017/myproject",
+} = process.env;
 
 module.exports = {
-  db,
+  db:DB_URL,
 };
