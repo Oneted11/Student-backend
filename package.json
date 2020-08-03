@@ -8,7 +8,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist",
-    "preinstall":"webpack -p",
+    "preinstall":"npx webpack -p",
     "dev": "export NODE_ENV=development && webpack -w & nodemon --inspect dist",
     "serve": "export NODE_ENV=production && webpack  & node --inspect dist",
     "test": "export NODE_ENV=test && mocha --require @babel/register test/*.js  --exit"
