@@ -8,7 +8,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist",
-    "postinstall":"export NODE_ENV=production && npx webpack -p",
+    "postinstall": "export NODE_ENV=production && npx webpack -p",
     "dev": "export NODE_ENV=development && webpack -w & nodemon --inspect dist",
     "serve": "export NODE_ENV=production && webpack  & node --inspect dist",
     "test": "export NODE_ENV=test && mocha --require @babel/register test/*.js  --exit"
@@ -28,7 +28,8 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "mongoose": "^5.9.19",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "source-map-support": "^0.5.19"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
