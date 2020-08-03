@@ -7,6 +7,11 @@ let dbConfig = require("./database/db");
 
 // Express Route
 const studentRoute = require("../back/routes/student.route");
+
+var corsOptions = {
+  origin: 'https://student-end-front.herokuapp.com/student-list',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
 // Connecting mongoDB Database
 mongoose.Promise = global.Promise;
 console.log("Attempting db connection ", dbConfig.db);
@@ -24,17 +29,14 @@ const app = express();
 if (process.env.NODE_ENV !== "test") {
   app.use(morgan("tiny"));
 }
+app.use(cors());
 app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
     extended: true,
   })
 );
-var corsOptions = {
-  origin: 'https://student-end-front.herokuapp.com/student-list',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
-app.use(cors(corsOptions));
+
 app.use("/health", (req, res) => res.send({ status: "ok" }));
 app.use("/students", studentRoute);
 // PORT
