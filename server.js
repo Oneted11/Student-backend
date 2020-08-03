@@ -1,6 +1,6 @@
 let express = require("express");
 let mongoose = require("mongoose");
-let cors = require("cors");
+// let cors = require("cors");
 let bodyParser = require("body-parser");
 let morgan = require("morgan");
 let dbConfig = require("./database/db");
@@ -30,7 +30,7 @@ app.use(
     extended: true,
   })
 );
-app.use(cors());
+// app.use(cors());
 app.use("/health", (req, res) => res.send({ status: "ok" }));
 app.use("/students", studentRoute);
 // PORT
