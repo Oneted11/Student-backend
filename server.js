@@ -32,7 +32,7 @@ const app = express();
 if (process.env.NODE_ENV !== "test") {
   app.use(morgan("tiny"));
 }
-app.use(cors("Access-Control-Allow-Origin", '*'));
+app.use(cors());
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", '*');
   res.header("Access-Control-Allow-Credentials", true);
