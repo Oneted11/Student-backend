@@ -9,7 +9,7 @@ let dbConfig = require("./database/db");
 const studentRoute = require("./routes/student.route");
 
 var corsOptions = {
-  origin: "https://student-end-front.herokuapp.com/student-list",
+  origin: Access-Control-Allow-Origin: *"https://student-end-front.herokuapp.com/student-list",
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 // Connecting mongoDB Database
@@ -28,11 +28,18 @@ db.once("open", function () {
 
 
 const app = express();
-app.options('*', cors())
+// app.options('*', cors())
 if (process.env.NODE_ENV !== "test") {
   app.use(morgan("tiny"));
 }
 app.use(cors());
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", '*');
+  res.header("Access-Control-Allow-Credentials", true);
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
+  next();
+});
 app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
