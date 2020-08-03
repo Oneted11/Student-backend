@@ -6,6 +6,9 @@ import { expect } from "chai";
 chai.use(chaiHttp);
 chai.should();
 
+let createdId
+let data={ name: "test", email: "test", rollno: 100 }
+
 describe("setup", () => {
   //wait time for db connections
   before(function (done) {
@@ -23,7 +26,7 @@ describe("setup", () => {
           done();
         });
     });
-  })
+  });
   describe("get students endpoint ", () => {
     it("should return statuscode 200", (done) => {
       chai
@@ -50,14 +53,26 @@ describe("setup", () => {
         .request(app)
         .post("/students/create-student")
         .set("content-type", "application/x-www-form-urlencoded")
-        .send({ name: "test", email: "test", rollno: 100 })
+        .send(data)
         .end(function (error, response) {
-          if (error) {
+          
             expect(response.body.id).to.be.a.string;
-            done(error);
-          } else {
+            createdId=response.body.id
             done();
+          
           }
+        );
+    });
+  });
+  describe("student delete endpoint", () => {
+    it("deletes student", (done) => {
+      // console.log(createdId)
+      chai
+        .request(app)
+        .delete("/students/delete-student/" + createdId ).send(data)
+        .end((err, response) => {
+          expect(200)
+          done()
         });
     });
   });

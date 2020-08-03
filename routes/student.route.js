@@ -25,7 +25,7 @@ router.route("/").get((req, res) => {
         message: error.message,
       });
     } else {
-      console.log(data)
+      // console.log(data)
       res.json(data);
     }
   });
