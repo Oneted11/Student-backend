@@ -8,10 +8,10 @@ let dbConfig = require("./database/db");
 // Express Route
 const studentRoute = require("./routes/student.route");
 
-var corsOptions = {
-  origin: Access-Control-Allow-Origin: *"https://student-end-front.herokuapp.com/student-list",
-  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-};
+// var corsOptions = {
+//   origin: Access-Control-Allow-Origin: *"https://student-end-front.herokuapp.com/student-list",
+//   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+// };
 // Connecting mongoDB Database
 mongoose.Promise = global.Promise;
 console.log("Attempting db connection ", dbConfig.db);
