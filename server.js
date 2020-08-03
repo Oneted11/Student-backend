@@ -6,7 +6,7 @@ let morgan = require("morgan");
 let dbConfig = require("./database/db");
 
 // Express Route
-const studentRoute = require("../back/routes/student.route");
+const studentRoute = require("./routes/student.route");
 
 var corsOptions = {
   origin: "https://student-end-front.herokuapp.com/student-list",
