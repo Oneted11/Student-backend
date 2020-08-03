@@ -1,6 +1,6 @@
 let express = require("express");
 let mongoose = require("mongoose");
-// let cors = require("cors");
+let cors = require("cors");
 let bodyParser = require("body-parser");
 let morgan = require("morgan");
 let dbConfig = require("./database/db");
@@ -30,7 +30,11 @@ app.use(
     extended: true,
   })
 );
-// app.use(cors());
+var corsOptions = {
+  origin: 'https://student-end-front.herokuapp.com/student-list',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+app.use(cors(corsOptions));
 app.use("/health", (req, res) => res.send({ status: "ok" }));
 app.use("/students", studentRoute);
 // PORT
